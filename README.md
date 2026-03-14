@@ -3,62 +3,52 @@
 AI-powered **Retail Sales Analytics Dashboard** built with **Python, Streamlit and Machine Learning** to analyze sales performance, predict future demand and understand customer behavior.
 
 ---
-
-# 🚀 Live Demo
-
+## 🚀 Live Demo
 🔗 https://retail-ai-dashboard.streamlit.app
-## 📊 Dashboard Preview
-
-
-Screenshot 2026-03-14 131209.png
-Screenshot 2026-03-14 131242.png
-Screenshot 2026-03-14 131303.png
-Screenshot 2026-03-14 131319.png
-Screenshot 2026-03-14 131337.png
 
 Explore the deployed dashboard using the link above.
 
 ---
 
-# 📊 Dashboard Preview
+## 📊 Dashboard Preview
 
-Interactive analytics dashboard with multiple modules:
+### Dashboard Overview
+![Dashboard](Screenshot%202026-03-14%20131209.png)
 
-• Sales Overview
-• Product Performance Analysis
-• Profit Analysis
-• Sales Prediction (Machine Learning)
-• Demand Forecasting
-• Customer Segmentation
-• Loss Detection
-• AutoML Insights
+### Sales Analysis
+![Sales Analysis](Screenshot%202026-03-14%20131242.png)
 
----
+### Sales Prediction
+![Prediction](Screenshot%202026-03-14%20131303.png)
 
-# ✨ Features
+### Demand Forecasting
+![Forecast](Screenshot%202026-03-14%20131319.png)
 
-* 📈 Sales Overview Dashboard
-* 🛒 Product Analysis
-* 💰 Profit Analysis
-* 🤖 Sales Prediction using Machine Learning
-* 📦 Demand Forecasting
-* 👥 Customer Segmentation
-* ⚠️ Loss Detection
-* ⚡ Auto ML Insights
+### Customer Segmentation
+![Segmentation](Screenshot%202026-03-14%20131337.png)
 
 ---
 
-# 🧰 Tech Stack
+## ✨ Features
 
-| Technology   | Usage                     |
-| ------------ | ------------------------- |
-| Python       | Core programming          |
-| Streamlit    | Web dashboard             |
-| Pandas       | Data analysis             |
-| Plotly       | Interactive visualization |
-| Scikit-learn | Machine learning          |
+- 📈 Sales Overview Dashboard
+- 🛒 Product Performance Analysis
+- 💰 Profit Analysis
+- 🤖 Sales Prediction using Machine Learning
+- 📦 Demand Forecasting
+- 👥 Customer Segmentation
+- ⚠️ Loss Detection
+- ⚡ Auto ML Insights
 
 ---
+
+## 🧰 Tech Stack
+
+- Python
+- Streamlit
+- Pandas
+- Plotly
+- Scikit-learn
 
 # 📂 Project Structure
 

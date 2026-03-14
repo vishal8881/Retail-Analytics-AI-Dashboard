@@ -7,6 +7,13 @@ AI-powered **Retail Sales Analytics Dashboard** built with **Python, Streamlit a
 # 🚀 Live Demo
 
 🔗 https://retail-ai-dashboard.streamlit.app
+## 📊 Dashboard Preview
+
+![Dashboard](Screenshot 2026-03-14 131209.png)
+
+![Sales Analysis](Screenshot 2026-03-14 131242.png)
+
+![Prediction](Screenshot 2026-03-14 131303.png)
 
 Explore the deployed dashboard using the link above.
 

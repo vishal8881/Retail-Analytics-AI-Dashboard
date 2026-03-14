@@ -3,20 +3,37 @@ import pandas as pd
 import plotly.express as px
 
 # -----------------------------
-# Login Check
+# Session setup
 # -----------------------------
-
 if "login" not in st.session_state:
     st.session_state["login"] = False
 
+if "user" not in st.session_state:
+    st.session_state["user"] = ""
+
+# -----------------------------
+# Login Page
+# -----------------------------
 if not st.session_state["login"]:
+
+    st.title("Login")
+
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+
+    if st.button("Login"):
+        if username == "admin" and password == "admin123":
+            st.session_state["login"] = True
+            st.session_state["user"] = username
+            st.rerun()
+        else:
+            st.error("Invalid credentials")
+
     st.stop()
 
-
 # -----------------------------
-# Sidebar Logout
+# Sidebar
 # -----------------------------
-
 with st.sidebar:
 
     st.write("Logged in as:", st.session_state["user"])
@@ -25,24 +42,18 @@ with st.sidebar:
         st.session_state["login"] = False
         st.rerun()
 
-
 # -----------------------------
-# Dashboard Title
+# Dashboard
 # -----------------------------
-
 st.title("Retail Sales Analytics Dashboard")
 
 st.write("Upload your dataset to analyze sales insights.")
 
-
 # -----------------------------
-# Dataset Upload Section
+# Upload Dataset
 # -----------------------------
-
-st.subheader("Upload Your Sales Dataset")
-
 uploaded_file = st.file_uploader(
-    "Upload CSV file",
+    "Upload CSV dataset",
     type=["csv"]
 )
 
@@ -50,16 +61,8 @@ if uploaded_file is not None:
 
     data = pd.read_csv(uploaded_file)
 
-    st.success("Dataset uploaded successfully!")
-
     st.subheader("Dataset Preview")
-
     st.dataframe(data.head())
-
-
-# -----------------------------
-# Sales Analysis Chart
-# -----------------------------
 
     if "Category" in data.columns and "Sales" in data.columns:
 
@@ -69,8 +72,7 @@ if uploaded_file is not None:
             data,
             x="Category",
             y="Sales",
-            color="Category",
-            title="Sales Distribution by Category"
+            color="Category"
         )
 
         st.plotly_chart(fig)

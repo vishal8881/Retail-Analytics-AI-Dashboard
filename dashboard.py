@@ -1,81 +1,133 @@
 import streamlit as st
+import sqlite3
 import pandas as pd
 import plotly.express as px
 
-# -----------------------------
-# Session setup
-# -----------------------------
-if "login" not in st.session_state:
-    st.session_state["login"] = False
+st.set_page_config(page_title="Retail AI Dashboard", layout="wide")
 
-if "user" not in st.session_state:
-    st.session_state["user"] = ""
+# ---------------- DATABASE ----------------
 
-# -----------------------------
-# Login Page
-# -----------------------------
-if not st.session_state["login"]:
+conn = sqlite3.connect("users.db", check_same_thread=False)
+c = conn.cursor()
 
-    st.title("Login")
+def create_table():
+    c.execute("CREATE TABLE IF NOT EXISTS users(username TEXT,password TEXT)")
+    conn.commit()
 
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+def add_user(username,password):
+    c.execute("INSERT INTO users(username,password) VALUES (?,?)",(username,password))
+    conn.commit()
 
-    if st.button("Login"):
-        if username == "admin" and password == "admin123":
-            st.session_state["login"] = True
-            st.session_state["user"] = username
-            st.rerun()
-        else:
-            st.error("Invalid credentials")
+def login_user(username,password):
+    c.execute("SELECT * FROM users WHERE username=? AND password=?",(username,password))
+    return c.fetchall()
 
-    st.stop()
+create_table()
 
-# -----------------------------
-# Sidebar
-# -----------------------------
-with st.sidebar:
+# ---------------- SESSION ----------------
 
-    st.write("Logged in as:", st.session_state["user"])
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 
-    if st.button("Logout"):
-        st.session_state["login"] = False
+# ---------------- LOGIN PAGE ----------------
+
+def login_page():
+
+    menu = ["Login","Sign Up"]
+    choice = st.sidebar.selectbox("Menu",menu,key="menu_select")
+
+    if choice == "Login":
+
+        st.title("Login")
+
+        username = st.text_input("Username",key="login_user")
+        password = st.text_input("Password",type="password",key="login_pass")
+
+        if st.button("Login",key="login_btn"):
+
+            result = login_user(username,password)
+
+            if result:
+                st.session_state.logged_in = True
+                st.success("Login Successful")
+                st.rerun()
+
+            else:
+                st.error("Wrong Username or Password")
+
+    if choice == "Sign Up":
+
+        st.title("Create Account")
+
+        new_user = st.text_input("Username",key="signup_user")
+        new_pass = st.text_input("Password",type="password",key="signup_pass")
+
+        if st.button("Signup",key="signup_btn"):
+
+            add_user(new_user,new_pass)
+
+            st.success("Account Created Successfully")
+            st.info("Go to Login")
+
+
+# ---------------- DASHBOARD ----------------
+
+def dashboard():
+
+    st.title("Retail AI Dashboard")
+
+    if st.sidebar.button("Logout"):
+        st.session_state.logged_in = False
         st.rerun()
 
-# -----------------------------
-# Dashboard
-# -----------------------------
-st.title("Retail Sales Analytics Dashboard")
+    st.sidebar.title("Navigation")
 
-st.write("Upload your dataset to analyze sales insights.")
+    page = st.sidebar.radio(
+        "Go to",
+        ["Overview","Product Analysis","Profit Analysis"]
+    )
 
-# -----------------------------
-# Upload Dataset
-# -----------------------------
-uploaded_file = st.file_uploader(
-    "Upload CSV dataset",
-    type=["csv"]
-)
+    file = st.file_uploader("Upload CSV Dataset",type=["csv"])
 
-if uploaded_file is not None:
+    if file is not None:
 
-    data = pd.read_csv(uploaded_file)
+        df = pd.read_csv(file)
 
-    st.subheader("Dataset Preview")
-    st.dataframe(data.head())
+        st.subheader("Dataset Preview")
+        st.dataframe(df.head())
 
-    if "Category" in data.columns and "Sales" in data.columns:
+        if page == "Overview":
+            st.write(df.describe())
 
-        st.subheader("Sales by Category")
+        if page == "Product Analysis":
 
-        fig = px.bar(
-            data,
-            x="Category",
-            y="Sales",
-            color="Category"
-        )
+            if "Category" in df.columns and "Sales" in df.columns:
 
-        st.plotly_chart(fig)
+                fig = px.bar(df,x="Category",y="Sales",color="Category")
 
-    else:
-        st.warning("Dataset must contain 'Category' and 'Sales' columns.")
+                st.plotly_chart(fig,use_container_width=True)
+
+            else:
+                st.warning("Dataset must contain Category and Sales columns")
+
+        if page == "Profit Analysis":
+
+            if "Category" in df.columns and "Profit" in df.columns:
+
+                fig = px.bar(df,x="Category",y="Profit",color="Category")
+
+                st.plotly_chart(fig,use_container_width=True)
+
+            else:
+                st.warning("Dataset must contain Category and Profit columns")
+
+
+# ---------------- APP ----------------
+
+if st.session_state.logged_in:
+
+    dashboard()
+
+else:
+
+    login_page()
